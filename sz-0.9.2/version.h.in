@@ -1,0 +1,2 @@
+#define SZ_REV "VERSION"
+extern void version(void);

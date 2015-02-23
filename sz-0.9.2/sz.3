@@ -1,0 +1,621 @@
+.\" Docs for the sz.h header and library.
+.TH SZ 3 "5 June 1997"
+.SH NAME
+mem2sz, mem2zsz, str2sz, str2zsz, szencode, str_decode, szfread, szfree,
+sztrunc, sztail, szchr, szschr, szcmp, szcspn, szdel, szfcspn, szfspn,
+szfwrite, szgetp, szicmp, szindex, szins, szkill, szlen, szncmp, sznicmp,
+szrindex, szspn, szcat, szccat, szcpy, szdup, szncat, szncpy, szpbrk, szrcchr,
+szrchr, szsbrk, szsep, szswrite, szsz, sztok, sztr, szdata, szstats, szwrite,
+szunzen, szzen
+\- handle non-null-terminated strings
+.SH SYNOPSIS
+.LP
+.nf
+.ft B
+#include <sz.h>
+.ft P
+.fi
+.LP
+.nf
+.LP
+.BI "sz *mem2sz(char *" "buf" ", size_t " "len" );
+.LP
+.BI "sz *mem2zsz(char *" "buf" ", size_t " "len" );
+.LP
+.BI "sz *str2sz(char *" "str" );
+.LP
+.BI "sz *str2zsz(char *" "str" );
+.LP
+.BI "char *szencode(void *" "s" );
+.LP
+.BI "sz *str_decode(char *" "str" );
+.LP
+.BI "void szfread(FILE *" "file" ", void *" "delim" );
+.LP
+.BI "void szfree(sz *" "s" );
+.LP
+.BI "void sztrunc(sz *" "s" ", size_t " "len" );
+.LP
+.BI "sz *sztail(void *" "s" ", long " "len" );
+.LP
+.BI "sz *szchr(void *" "s" ", int " "c" );
+.LP
+.BI "char *szschr(void *" "s" ", int " "c" );
+.LP
+.BI "int szcmp(void *" "s1" ", void *" "s2" );
+.LP
+.BI "size_t szcspn(void *" "s" ", void *" "charset" );
+.LP
+.BI "int szdel(sz *" "dest" ", size_t" "offset"\c
+.BI ", size_t " "len" );
+.LP
+.BI "size_t szfcspn(void *" "s" ", int (*" isfcn ")(int c));"
+.LP
+.BI "size_t szfspn(void *" "s" ", int (*" isfcn ")(int c));"
+.LP
+.BI "sz *szgetp(void *" "v" );
+.LP
+.BI "int sfwrite(FILE *" "fp" ", void *" "s" );
+.LP
+.BI "int szicmp(void *" "s1" ", void *" "s2" );
+.LP
+.BI "int szindex(void *" "s" ", int " "c" );
+.LP
+.BI "int szins(sz *" "dest" ", void *" "src"\c
+.BI ", size_t " "offset" );
+.LP
+.BI "void szkill(sz *" "s" );
+.LP
+.BI "size_t szlen(void *" "s" );
+.LP
+.BI "int szncmp(void *" "s1" ", void *" "s2"\c
+.BI ", size_t " "len" );
+.LP
+.BI "int sznicmp(void *" "s1" ", void *" "s2"\c
+.BI ", size_t " "len" );
+.LP
+.BI "int szrindex(void *" "s" ", int " "c" );
+.LP
+.BI "size_t szspn(void *" "s" ", void *" "charset" );
+.LP
+.BI "sz *szcat(void *" "dest" ", void *" "s" );
+.LP
+.BI "sz *szccat(void *" "dest" ", int " "c" );
+.LP
+.BI "sz *szcpy(void *" "dest" ", void *" "src" );
+.LP
+.BI "sz *szdup(void *" "s" );
+.LP
+.BI "sz *szncat(void *" "dest" ", void *" "s"\c
+.BI ", size_t " "len" );
+.LP
+.BI "sz *szncpy(void *" "dest" ", void *" "src"\c
+.BI ", size_t " "len" );
+.LP
+.BI "sz *szpbrk(void *" "s" ", void *" "set" );
+.LP
+.BI "char *szsrchr(void *" "s" ", int " "c" );
+.LP
+.BI "sz *szrchr(void *" "s" ", int " "c" );
+.LP
+.BI "sz *szsep(sz **" "stringp" ", void *" "delim" );
+.LP
+.BI "char *szsbrk(void *" "s" ", void *" "set" );
+.LP
+.BI "sz *szswrite(char *" "dest" ", size_t" "len"\c
+.BI ", void *" "src" );
+.LP
+.BI "sz *szsz(void *" "s1" ", void *" "s2" );
+.LP
+.BI "sz *sztok(void *" "string" ", void *" "delim" );
+.LP
+.BI "sz *sztr(void *" "s" ", void *" "from"\c
+.BI ", void *" "to" );
+.LP
+.BI "sz *szwrite(void *" "s" );
+.LP
+.BI "char *szdata(void *" "s" );
+.LP
+.BI "int szstats(void);"
+.LP
+.BI "sz *szunzen(sz *" "s" );
+.LP
+.BI "sz *szzen(sz *" "s" );
+.LP
+.ft P
+.LP
+.fi
+.SH DESCRIPTION
+.IX "mem2sz()" "" "makes sz from mem"
+.IX "mem2zsz()" "" "makes sz from mem, zen bit set"
+.IX "str2sz()" "" "makes sz from str"
+.IX "str2zsz()" "" "makes sz from str, zen bit set"
+.IX "str_decode()" "" "reads \ formats"
+.IX "struct sz" "" "incomplete type"
+.IX "szcat()" "" "strcat analogue"
+.IX "szccat()" "" "adds 1 character to string"
+.IX "szchr()" "" "strchr analogue"
+.IX "szcmp()" "" "strcmp analogue"
+.IX "szcpy()" "" "strcpy analogue"
+.IX "szcspn()" "" "strcspn analogue"
+.IX "szdata()" "" "return data pointer"
+.IX "szfcspn()" "" "strcspn analogue, using function pointer"
+.IX "szfspn()" "" "strcspn analogue, using function pointer"
+.IX "szdata()" "" "return data pointer"
+.IX "szdel()" "" "delete characters from string"
+.IX "szdup()" "" "strdup analogue"
+.IX "szencode()" "" "produces \ formats"
+.IX "szfread()" "" "read new sz from file"
+.IX "szfree()" "" "delete string and substrings"
+.IX "szfwrite()" "" "write sz to stream"
+.IX "szicmp()" "" "stricmp analogue"
+.IX "szindex()" "" "strchr, returns offset or -1"
+.IX "szins()" "" "insert characters into string"
+.IX "szipbrk()" "" "strpbrk, returns offset or -1"
+.IX "szlen()" "" "strlen analogue"
+.IX "szncat()" "" "strncat analogue"
+.IX "szncmp()" "" "strncmp analogue"
+.IX "szncpy()" "" "strncpy analogue"
+.IX "sznicmp()" "" "strnicmp analogue"
+.IX "szpbrk()" "" "strpbrk analogue"
+.IX "szpsbrk()" "" "strpbrk analogue"
+.IX "szrcchr()" "" "strrchr, returns ptr to data"
+.IX "szrchr()" "" "strrchr analogue"
+.IX "szrindex()" "" "strrchr, returns offset or -1"
+.IX "szschr()" "" "strchr, returns ptr to data"
+.IX "szsep()" "" "strsep analogue"
+.IX "szspbrk()" "" "strpbrk, returns ptr to data"
+.IX "szspn()" "" "strspn analogue"
+.IX "szstats()" "" "print stats to stderr"
+.IX "szswrite()" "" "write sz to string"
+.IX "szsz()" "" "strstr analogue"
+.IX "sztail()" "" "return ptr to data + n"
+.IX "sztok()" "" "strtok analogue"
+.IX "sztr()" "" "$1=`echo \"$1\" | tr \"$2\" \"$3\"`"
+.IX "sztrunc()" "" "lower length"
+.IX "szunzen()" "" "clear zen bit"
+.IX "szwrite()" "" "write sz to stdout"
+.IX "szzen()" "" "set zen bit"
+.IX "typedef struct sz sz" "" "opaque reference"
+.SS Overview
+.LP
+These functions implement a string-like type.  The intent is that, in most
+ways, you can use an object of type
+.B sz *
+as though it were an object of type
+.BR "char *" ", "
+except, of course, for dereferencing it.  The functions perform functions
+similar to their analogues from the standard library
+.B str*(\|)
+functions, with similar semantics.  By design, the implementation of the
+.B sz
+type is opaque; client programs are not able to refer to the internals,
+in case the mechanisms are altered later.
+.LP
+When a function in this library takes a
+.B "void *"
+argument, it typically can accept either a normal C string, or an
+.BR "sz *" ". "
+The limitation is that, if you pass a normal C string beginning with
+a magic character sequence (currently
+.BR "0xFF" ", " "0x01" "), "
+the library may behave in unexpected manners.  Otherwise, the string
+will be silently converted for internal use.  This allocates a temporary
+.BR "sz" ". "
+The temporary object will be deleted automatically, unless the function
+returns a reference to it.  (For instance,
+.B szchr
+may return a reference into an object that the caller has no handle for.)
+For this reason, it is best to avoid using this feature to provide
+strings for arguments which have references returned to them.
+.LP
+The major differences between the unterminated strings and standard C strings
+are simple.  The unterminated variety does not need to have a NUL character
+at its end, and automatically adapts in size when concatenated to.  The
+terminated variety has much lower overhead.  The semantics are largely
+identical; for instance,
+.B szchr(\|)
+produces an object which, if truncated, truncates the original string, just
+as you would expect with the result of
+.BR strchr(\|) ". "
+.LP
+However, many of these functions silently allocate space.  The space thus
+allocated is tracked; all substrings of a given string are deleted when the
+object itself is deleted, with
+.BR szfree(\|) ", "
+but they will consume memory until then, or until they are explicitly
+deleted.
+.SS Naming Conventions
+.LP
+Most of these functions have names starting with
+.BR sz ", "
+which is intended, in naming, to correspond roughly to the
+.B str
+prefix used in
+.IR <string.h> ". "
+In general, functions which return a C-style string have an infix
+.RB "'" s "'"
+immediately after the
+.RB "'" sz "'"
+prefix. A
+.RB "'" c "'"
+indicates a character (passed as an int).
+.nf
+.ft C
+	sz   *szpbrk(void *s, void *set);	/* analogue to strpbrk	*/
+	char *szsbrk(void *s, void *set);	/* returns (char *)	*/
+.ft P
+.fi
+.LP
+Some functions refer to a
+.I case-insensitive
+matching operation; this is indicated by an
+.RB "," i ","
+infix in the name, and implemented by treating all alphabetical
+characters as if they were lower case, which may have surprising results.
+.SS Children
+Strings may have parents or children.  When a substring is created, it has
+a parent, which is the string it is a substring of; it is added to the list
+of children of that parent.
+.LP
+Modifications of substrings propogate to the
+parent, to its parent, and so on, and then on back down to all children.  Not
+all modifications of a given string have any real effect on substrings of
+it.
+.SS Zen
+.LP
+Some strings (notably, substrings of other strings) have a magic bit set
+called the
+.I zen
+bit.  This bit indicates that the given string does not actually own its
+storage; the space it points to was not allocated for it, and, when it is
+deleted, it will not attempt to free that memory.  There are entry points
+to create
+.I zen
+strings pointing at user-provided space; these would be used to avoid copying
+string literals, for instance.
+.LP
+Attempts to modify a
+.I zen
+string with no parent will cause it to become a normal string, with allocated
+storage, which contains a copy of the original data.
+.LP
+All children are considered
+.I zen
+strings, and have no data storage of their own.
+.SS Functions
+.LP
+The functions
+.BR "mem2sz(\|)" " and " "str2sz(\|)"
+create sz's from existing memory.
+.B mem2sz(\|)
+copies
+.I len
+bytes from
+.I buf
+into newly allocated space;
+.B str2sz(\|)
+copies bytes from
+.I buf
+into newly allocated space, until it hits a terminating NUL byte, which
+is not copied.
+.LP
+The functions
+.BR "mem2zsz(\|)" " and " "str2zsz(\|)"
+are equivalent to
+.BR "mem2sz(\|)" " and " "str2sz(\|)" ", "
+except that they do not copy the space, but simply maintain a pointer to
+it.  If the space is deallocated before the string is deleted, referencing
+the string will invoke undefined behavior.
+.LP
+The functions
+.BR "szgetp(\|)" " and " "szkill(\|)"
+handle semi-automatic translations from strings.
+The argument to
+.B szgetp(\|)
+is either a plain C string, or a
+.B sz
+object.  If it is a string, a Zen wrapper is put on it; otherwise,
+the original object is returned.
+.B szgetp(\|)
+returns a null pointer on error, or if the object appears to be another
+sort of magically wrapped object.
+The function
+.B szkill(\|)
+will destroy any
+.B sz
+object which has not been passed through
+.B szgetp
+at least once.  These functions allow the automatic deletion of temporary
+wrapper strings.
+.LP
+The functions
+.BR "szencode(\|)" " and " "str_decode(\|) "
+convert between unterminated strings, and regular strings of a normalized
+format.  Unprintable characters, including NUL bytes, are translated to
+C-style escape sequences by
+.BR szencode(\|) ", "
+and C-style escape sequences are translated to NUL bytes by
+.BR str_decode(\|) "."
+(The underscore prevents the library from stepping on the compiler's
+namespace.)
+.LP
+Deleting strings is accomplished by means of
+.BR szfree(\|) ", "
+which deletes the string given to it, and any children that string may
+have.  If the string was a
+.I zen
+string, this is all that happens; otherwise, the allocated memory is freed.
+.LP
+The
+.B sztrunc(\|)
+function truncates the string referred to by
+.I s
+to
+.I len
+bytes.  This truncation affects children as follows; if it specifies a
+location inside the child string, it truncates the child string to the
+same point.  Otherwise, it has no effect.  It is semantically equivalent
+to the assignment
+.nf
+.ft C
+	s[len] = '\\0';
+.ft R
+.fi
+for a normal C-style string.
+.LP
+The
+.B sztail(\|)
+function returns a substring of
+.I s
+offset by
+.I len
+bytes.  It is analogous to the C expression
+.nf
+.ft C
+	(s + len)
+.ft R
+.fi
+for a normal C-style string.  Modifications of the tail affect the original
+string.  If
+.I len
+is negative, sztail counts back from the end of
+.I s
+by the absolute value of
+.I len
+bytes.
+.LP
+The functions
+.BR szchr(\|) ", " szcmp(\|) ", " szcspn(\|) ", "\c
+.BR szlen(\|) ", " szncmp(\|) ", " szspn(\|) ", "\c
+.BR szcat(\|) ", " szcpy(\|) ", " szncat(\|) ", "\c
+.BR szncpy(\|) ", " szpbrk(\|) ", " szrchr(\|) ", "\c
+.BR szsz(\|) ", " and " " sztok(\|)
+perform functions analogous to their
+.B str*(\*)
+counterparts; the only distinction is that functions which, for C-style
+strings, return a pointer into the string, actually create a substring
+in this library.  (As noted above, this substring is deleted when the
+parent is deleted.)
+.LP
+The functions
+.BR szfcspn(\|) " and " szfspn(\|)
+are equivalent to
+.BR szcspn(\|) " and " szspn(\|) ", "
+respectively, except that they take a pointer to a function taking an int
+and returning an int, used to determine whether or not a character is
+logically in the spanning set.  For instance, you could use
+.B isalpha
+as a second argument to these, to get spans of letters.
+.LP
+The functions
+.BR "szindex(\|)" ", " "szrindex(\|)" " and " "szipbrk(\|) "
+are equivalent to
+.BR "szchr(\|)" ", " "szrchr(\|)" " and " "szpbrk(\|) "
+respectively, except that they return an offset into the original string,
+or -1 if
+.I c
+is not found in
+.IR s ". "
+They do not allocate memory.
+.LP
+The functions
+.BR "szschr(\|)" ", " "szrschr(\|)" " and " "szsbrk(\|) "
+are equivalent to
+.BR "szchr(\|)" ", " "szrchr(\|)" " and " "szpbrk(\|) "
+respectively, except that they return a pointer to the character which
+matched, rather than a substring.  They do not allocate memory.
+.LP
+The functions
+.BR "szicmp(\|)" " and " "sznicmp(\|) "
+are equivalent to
+.BR "szcmp(\|)" " and " "szncmp(\|) "
+respectively, except that they attempt a
+.I case-insensitive
+comparison; the
+implications of this are ill-defined for many character sets, but the intent
+is that the strings be compared as though case-mashed with
+.BR "tolower(\|)" ". "
+Likewise, the functions
+.BR "szsicmp(\|)" " and " "szsnicmp(\|) "
+are equivalent to
+.BR "szscmp(\|)" " and " "szsncmp(\|) "
+respectively, with the same difference.
+.LP
+The function
+.BR szccat(\|)
+concatenates the single character
+.I c
+onto the string
+.I s
+and returns
+.IR s ". "
+It treats c as though it were an
+.B unsigned char
+converted to
+.BR int ". "
+.LP
+The function
+.B sztr(\|)
+performs a function similar to that of the UNIX utility
+.IR tr ". "
+For each character in the string
+.IR s ", "
+if that character occurs in
+.IR from ", "
+it is replaced with the character in the same position in the string
+.IR to ". "
+In both
+.IR from " and " to ", "
+ranges (of the form
+.IR "x" "-" "y" ") "
+are interpreted to mean all characters from
+.IR x " to " y
+inclusive.  (Using the local character set; ASCII collation is not
+guaranteed.)
+.LP
+The function
+.BR szdup(\|) ", "
+much like the
+.B strdup(\|)
+function provided by some libraries, produces a duplicate of the provided
+string; it returns
+.B NULL
+if no memory is available.  The duplicate string will have no parent,
+and will have its own duplicate of the storage of the original.  It will
+not have the
+.I zen
+bit set.
+.LP
+The
+.B szsep(\|)
+function, much like the
+.B strsep(\|)
+provided by some libraries, is an alternative to
+.BR sztok(\|) ". "
+It runs through the string pointed to by
+.IR stringp ", "
+looking for any instance of a character in
+.IR delim ". "
+When it finds one, it stores a string starting one character after the
+delimiter into
+.IR stringp ", "
+truncates the original string at the delimiter, and returns the original
+string.  This allows detection of empty fields, such as those in a traditional
+UNIX password file.
+If
+.RI "*" "stringp "
+is initially
+.BR NULL ", "
+.B szsep(\|)
+returns
+.BR NULL ". "
+.LP
+The function
+.B szdata(\|)
+returns a pointer to the data associated with a given string; this may
+be treated as a standard C-style string, as the library maintains a null
+character past the end of the string.
+.LP
+The function
+.B szswrite(\|)
+copies no more than
+.I len
+characters from
+.I src
+into
+.IR dest ", "
+and returns the number of characters copied.
+The related functions
+.B szwrite(\|)
+and
+.B szfwrite(\|)
+copy all of the characters from
+.I s
+to the standard output, or a provided stream, respectively, and return
+the number of characters written, or
+.B EOF
+on failure.
+.LP
+The functions
+.BR "szunzen(\|)" " and " "szzen(\|) "
+clear and set the
+.I zen
+bit, respectively.  They return
+.IR s ". "
+An idiomatic usage would be
+.nf
+.ft C
+	return szunzen(str2zsz(string));
+.ft R
+.fi
+to generate a string using a pre-allocated buffer, but which will free
+the buffer when it is deleted.
+.LP
+The
+.B szread(\|)
+function reads from
+.I file
+until
+.B EOF
+or one of the characters in
+.I delim
+is reached.  The characters read are returned as a new
+.IR "sz" ". "
+Any characters in
+.I delim
+following those returned will be consumed.
+If
+.I delim
+is a null pointer, the entire contents of 
+.I file
+are read.  A null pointer is returned on error, or if
+.I file
+reaches
+.B EOF
+before any characters can be read.
+.LP
+The
+.B szstats(\|)
+function prints, to standard error, statistics about the number of strings
+created and deleted.  If the same number of strings have been created and
+deleted, it returns zero; otherwise, it returns one.  It is a debugging tool
+only.
+.LP
+The
+.B szins(\|)
+function inserts one string within another.  It is moderately experimental.
+Likewise,
+.B szdel(\|)
+deletes a specified number of characters from a given string.
+.SH EXAMPLE
+The example has not been written, as follows:
+.LP
+.nf
+.DT
+.ft C
+	#include "sz.h"
+	#include <stdio.h>
+.ft R
+.fi
+.SH SEE ALSO
+.B string (3)
+.SH BUGS
+The man page may be incomplete.
+.LP
+It is undesirable that
+.B szchr(\|)
+allocates memory, even though it does go away; this is why
+.B szindex(\|)
+and
+.B szschr(\|)
+were created.
+.LP
+The string library is not optimally fast, although it's not
+as bad as it could be.
+.LP
+It would be nice if it were easier to mix these with plain old strings.
+.LP
+Because it is now easier to mix these with plain old strings, there is
+a serious memory leak in any function which returns a reference into
+an argument, if that argument is a plain old string.

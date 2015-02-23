@@ -1,0 +1,57 @@
+0.1	First draft
+
+0.1a	Began the proliferation of fn's which can work with char *'s
+	and sz's, to simplify code using ""'s with sz's.
+
+0.2	Imported makefile and versioning stuff.
+
+0.3	Removed all "char *" variants, replacing them with the hacky
+	new (void *) logic.
+
+0.4	Changed the (void *) logic to use 0xFF, 0x01.
+	Made sztrunc not modify data - it was cheating on Zen strings,
+	and there's no need for a nul byte anyway.
+	Fixed up the depth logic a bit, by decrementing depth (if set)
+	(instead of killing) in all of the functions which return
+	references.
+	Made sztrunc modify data, but dezen strings, to make
+	szdata() return a plausible string.
+
+0.5	Generalized \ooo and \xXX to use right # of digits for CHAR_BIT,
+	which may break some code when CHAR_BIT changes.
+	Fixed malloc debugger related logic.
+	Fixed L() internal macro for signed char, ISO 8859-1 and related
+	systems.
+	Added support for \<->\\ to str_decode and szencode.
+
+0.6	sztail() now takes negative numbers to count back.
+	Updated email address
+	fixed several arguable signed/unsigned conflicts
+	Made interal szdezen() fail cleanly if no memory available
+	Made sure (I hope!) all memory allocation is checked.
+
+0.7	Cleaned up (I hope) logic in the *cmp functions.
+	Removed EXIT_FAILURE workaround for StunOS.
+	Added szwrite(), szswrite(), and szfwrite(), and documentation
+	for them.
+	Added szfread()
+	Fixed possible memory leak in szdup() when no memory available.
+
+0.8	Added szfspn, szfcspn (use function, not list of chars)
+
+0.9	Updated copyright for 1998, even though many of the earlier changes
+		occured in 1998.
+	Added copyright notice to sz.c.
+	Made mmspn and mmcspn static, because they're really not a logical
+		part of the interface.
+	Updated copyright for 1999
+	Started on regression tests (very simple so far).
+	Fixed makefile for regression tests to work on systems that don't
+		know about LDLIBS
+
+0.9.1	Changed "==" to ">=" in szsep, just to be paranoid.
+	Tested for more impossible boundary conditions to avoid coredumps.
+
+0.9.2	Added szins, szdel
+	Licensing change propogated
+	Fixed logic error in sztail for negative n.

@@ -1,0 +1,24 @@
+
+Pipecut 0.5-alpha README
+========================
+
+
+KNOWN bugs / limitations:
+=========================
+
+a)  Multiple arguments to a black box command are not parsed / delivered to execlp().
+The code needs a more complete command parser.
+
+b)  Setting multiple flags using '-' has crash-causing use cases not yet debugged.
+
+
+c)  There's no way to output the full result of your toolset while inside the
+UI.
+
+Workarounds:
+
+1. '|' to open the less pager, and do something like '|$cat > /tmp/foo'
+
+2. Save the toolset with ']'. Exit the UI and run 'cat filename | pipecut -t toolsetname'
+
+

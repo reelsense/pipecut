@@ -1,0 +1,9 @@
+A few notes:
+
+This library is mostly similar to <string.h>.
+
+There are no "const" in this library, because it is *impossible* to
+implement strchr() (or any equivalent) using const "correctly".
+
+It's been run under my malloc debugger, and doesn't appear to leak any
+memory.

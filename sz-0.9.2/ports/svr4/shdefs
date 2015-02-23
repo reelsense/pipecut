@@ -1,0 +1,5 @@
+#!/bin/sh
+SAVEPATH="$PATH"
+PATH=/bin:/usr/bin
+C="\\c"
+N=""

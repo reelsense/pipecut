@@ -1,0 +1,10 @@
+default: makefiles
+
+portcopy:
+	if	[ "X$(PORT)" != "X" ] ; \
+	then	cp ports/$(PORT)/* . ; \
+	fi
+
+makefiles: portcopy
+	./maker
+	$(MAKE) -f Makefile makefiles

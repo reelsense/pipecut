@@ -1,0 +1,29 @@
+#!/bin/sh
+if	grep "^ALLDIRS" Makefile.in >/dev/null
+then	R=""
+else	R="make.rulez"
+fi
+cat make.vars local.vars > Makefile
+if	grep "USESYS=1" local.vars > /dev/null
+then	if	! grep "^SYS=" local.vars > /dev/null
+	then	SYS=/`uname -ms | sed -e 's![/ ]!_!g'`
+	else	eval `grep "^SYS=" local.vars`
+		case X"$SYS" in
+		X/*)	;;
+		*)	SYS="/$SYS";;
+		esac
+	fi
+fi
+if	! grep BINDIR local.vars > /dev/null
+then	echo BINDIR=\"\$\(PREFIX\)/bin$SYS\" >> Makefile
+fi
+if	! grep LIBDIR local.vars > /dev/null
+then	echo LIBDIR=\"\$\(PREFIX\)/lib$SYS\" >> Makefile
+fi
+if	! grep INCLUDEDIR local.vars > /dev/null
+then	echo INCLUDEDIR=\"\$\(PREFIX\)/include\" >> Makefile
+fi
+if	! grep MANDIR local.vars > /dev/null
+then	echo MANDIR=\"\$\(PREFIX\)/man\" >> Makefile
+fi
+cat local.vars Makefile.in $R >> Makefile

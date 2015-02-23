@@ -1,0 +1,14 @@
+LDLIBS=-lsz -lvers
+LDFLAGS=-L. -L$(PREFIX)/lib $(LDLIBS)
+PACKAGE=sz
+VERSION=0.9.2
+
+TARGETS=libvers.a VERSION
+LIBS=libsz.a
+INCLUDES=sz.h
+
+LIB=libsz.a
+
+OBJS=sz.o
+MAN3=sz
+TEST=sztest
