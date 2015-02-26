@@ -69,7 +69,7 @@
 #include <sys/stat.h>
 
 #include <limits.h>
-#include "sz.h"
+#include "sz-0.9.2/sz.h"
 
 // Display routines
 void printvisible(char *,int withHL, char *exp, int withLA, char *LAexp);

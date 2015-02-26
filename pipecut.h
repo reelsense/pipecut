@@ -71,7 +71,7 @@
 #include <sys/stat.h>
 
 #include <limits.h>
-#include "sz.h"
+#include "sz-0.9.2/sz.h"
 
 #ifdef HAVE_SYS_QUEUE_H
 #include <sys/queue.h>
